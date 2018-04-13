@@ -21,7 +21,7 @@ using namespace std;
 
 bool output_log = true;
 
-#define exit_if(r, ...) if(r) {printf(__VA_ARGS__); printf("%s:%d error no: %d error msg %s\n", __FILE__, __LINE__, errno, strerror(errno)); exit(1);}
+#define exit_if(r, ...) if(r) {printf(__VA_ARGS__); printf("\n%s:%d error no: %d error msg %s\n", __FILE__, __LINE__, errno, strerror(errno)); exit(1);}
 
 void setNonBlock(int fd) {
     int flags = fcntl(fd, F_GETFL, 0);
@@ -54,6 +54,8 @@ void handleAccept(int efd, int fd) {
     setNonBlock(cfd);
     updateEvents(efd, cfd, EPOLLIN, EPOLL_CTL_ADD);
 }
+
+//当readed.empty()&&writeEnabled成立时，取消注册EPOLLOUT事件
 struct Con {
     string readed;
     size_t written;
@@ -67,6 +69,7 @@ void sendRes(int efd, int fd) {
     Con& con = cons[fd];
     if (!con.readed.length()) {
         if (con.writeEnabled) {
+			//当较大数据写完后，需要取消注册EPOLLOUT事件，意思是不用再写了
             updateEvents(efd, fd, EPOLLIN, EPOLL_CTL_MOD);
             con.writeEnabled = false;
         }
@@ -84,6 +87,8 @@ void sendRes(int efd, int fd) {
         cons.erase(fd);
         return;
     }
+	//一般较大的数据无法一次行写出，所以要注册EPOLLOUT事件,在EPOLLOUT事件继续循环写出
+	//如果缓冲区满了，注册EPOLLOUT事件
     if (wd < 0 &&  (errno == EAGAIN || errno == EWOULDBLOCK)) {
         if (!con.writeEnabled) {
             updateEvents(efd, fd, EPOLLIN|EPOLLOUT, EPOLL_CTL_MOD);
@@ -151,12 +156,14 @@ void loop_once(int efd, int lfd, int waitms) {
 
 int main(int argc, const char* argv[]) {
     if (argc > 1) { output_log = false; }
+	//当client发送信息到server就关闭了，然后server发送响应信息给client就会触发SIGPIPE信号，会导致服务端进程退出
+	//屏蔽SIGPIPE，避免服务端进程结束
     ::signal(SIGPIPE, SIG_IGN);
     httpRes = "HTTP/1.1 200 OK\r\nConnection: Keep-Alive\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Length: 1048576\r\n\r\n123456";
     for(int i=0;i<1048570;i++) {
         httpRes+='\0';
     }
-    short port = 80;
+    short port = 8012;
     int epollfd = epoll_create(1);
     exit_if(epollfd < 0, "epoll_create failed");
     int listenfd = socket(AF_INET, SOCK_STREAM, 0);
