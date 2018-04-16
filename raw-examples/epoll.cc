@@ -30,6 +30,7 @@ void setNonBlock(int fd) {
     exit_if(r<0, "fcntl failed");
 }
 
+//向fd注册events事件
 void updateEvents(int efd, int fd, int events, int op) {
     struct epoll_event ev;
     memset(&ev, 0, sizeof(ev));
@@ -57,16 +58,19 @@ void handleAccept(int efd, int fd) {
 
 //当readed.empty()&&writeEnabled成立时，取消注册EPOLLOUT事件
 struct Con {
-    string readed;
-    size_t written;
-    bool writeEnabled;
+    string readed;		//从该套接字累计读到的字符串
+    size_t written;		//向该套接字写了多少字节
+    bool writeEnabled;	//是否注册了EPOLLOUT事件
     Con(): written(0), writeEnabled(false) {}
 };
 map<int, Con> cons;
 
 string httpRes;
+
+//在写大的数据（例如4G）的时候，是不可能调用一次write就能写完的，
 void sendRes(int efd, int fd) {
     Con& con = cons[fd];
+	//con.readed.length()=0的时候（在cons.erase后），表示较大数据已经写完
     if (!con.readed.length()) {
         if (con.writeEnabled) {
 			//当较大数据写完后，需要取消注册EPOLLOUT事件，意思是不用再写了
@@ -87,12 +91,12 @@ void sendRes(int efd, int fd) {
         cons.erase(fd);
         return;
     }
-	//一般较大的数据无法一次行写出，所以要注册EPOLLOUT事件,在EPOLLOUT事件继续循环写出
+	//一般较大的数据无法一次性写出，所以要注册EPOLLOUT事件,在EPOLLOUT事件继续循环写出
 	//如果缓冲区满了，注册EPOLLOUT事件
     if (wd < 0 &&  (errno == EAGAIN || errno == EWOULDBLOCK)) {
         if (!con.writeEnabled) {
             updateEvents(efd, fd, EPOLLIN|EPOLLOUT, EPOLL_CTL_MOD);
-            con.writeEnabled = true;
+            con.writeEnabled = true;	//表示已注册EPOLLOUT事件
         }
         return;
     }
@@ -117,6 +121,7 @@ void handleRead(int efd, int fd) {
             }
         }
     }
+	//接收缓冲区为空
     if (n<0 && (errno == EAGAIN || errno == EWOULDBLOCK))
         return;
     //实际应用中，n<0应当检查各类错误，如EINTR

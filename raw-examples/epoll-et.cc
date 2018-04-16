@@ -79,6 +79,7 @@ void sendRes(int fd) {
         cons.erase(fd);
         return;
     }
+	//发送缓冲区满了，当发送缓冲区从满到不满的时候，会触发EPOLLOUT事件（写事件）
     if (wd < 0 &&  (errno == EAGAIN || errno == EWOULDBLOCK))
         return;
     if (wd<=0) {
@@ -102,6 +103,7 @@ void handleRead(int efd, int fd) {
             }
         }
     }
+	//接收缓冲区为空，当接收缓冲区从空到不空的时候，会触发EPOLLIN事件（读事件）
     if (n<0 && (errno == EAGAIN || errno == EWOULDBLOCK))
         return;
     //实际应用中，n<0应当检查各类错误，如EINTR
