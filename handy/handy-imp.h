@@ -9,6 +9,10 @@
 #include <memory>
 #include <unistd.h>
 
+#ifdef _VS
+typedef long long int64_t;
+#endif
+
 namespace handy {
 struct Channel;
 struct TcpConn;

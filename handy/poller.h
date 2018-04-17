@@ -11,6 +11,7 @@
 
 namespace handy {
 
+//全局常变量存储在只读内存，不可修改
 const int kMaxEvents = 2000;
 const int kReadEvent = POLLIN;
 const int kWriteEvent = POLLOUT;

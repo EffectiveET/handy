@@ -6,6 +6,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _VS
+typedef long long int64_t;
+#endif
+
 namespace handy {
 
 struct noncopyable {

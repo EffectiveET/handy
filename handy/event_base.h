@@ -2,6 +2,8 @@
 #include "handy-imp.h"
 #include "poller.h"
 
+#define OS_LINUX
+
 namespace handy {
 
 typedef std::shared_ptr<TcpConn> TcpConnPtr;

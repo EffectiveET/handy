@@ -77,7 +77,7 @@ struct EventsImp {
 };
 
 EventBase::EventBase(int taskCapacity) {
-    imp_.reset(new EventsImp(this, taskCapacity));
+    imp_.reset(new EventsImp(this, taskCapacity));	//可以用初始化列表初始化
     imp_->init();
 }
 
@@ -122,7 +122,7 @@ void EventsImp::loop() {
 void EventsImp::init() {
     int r = pipe(wakeupFds_);
     fatalif(r, "pipe failed %d %s", errno, strerror(errno));
-    r = util::addFdFlag(wakeupFds_[0], FD_CLOEXEC);
+    r = util::addFdFlag(wakeupFds_[0], FD_CLOEXEC);		//FD_CLOEXEC ：使进程和子进程调用exec*()函数时，会close套接字
     fatalif(r, "addFdFlag failed %d %s", errno, strerror(errno));
     r = util::addFdFlag(wakeupFds_[1], FD_CLOEXEC);
     fatalif(r, "addFdFlag failed %d %s", errno, strerror(errno));
