@@ -67,6 +67,8 @@ struct EventsImp {
     void safeCall(Task&& task) { tasks_.push(move(task)); wakeup(); }
     void loop();
     void loop_once(int waitMs) { poller_->loop_once(std::min(waitMs, nextTimeout_)); handleTimeouts(); }
+
+	//下次调用读事件的时候delete Channel，即关闭读通道，不再执行task
     void wakeup() {
         int r = write(wakeupFds_[1], "", 1);
         fatalif(r<=0, "write error wd %d %d %s", r, errno, strerror(errno));
@@ -128,15 +130,17 @@ void EventsImp::init() {
     fatalif(r, "addFdFlag failed %d %s", errno, strerror(errno));
     trace("wakeup pipe created %d %d", wakeupFds_[0], wakeupFds_[1]);
     Channel* ch = new Channel(base_, wakeupFds_[0], kReadEvent);
+
+	//注册读事件处理器
     ch->onRead([=] {
         char buf[1024];
-        int r = ch->fd() >= 0 ? ::read(ch->fd(), buf, sizeof buf) : 0;
+        int r = (ch->fd() >= 0) ? ::read(ch->fd(), buf, sizeof buf) : 0;
         if (r > 0) {
             Task task;
             while (tasks_.pop_wait(&task, 0)) {
                 task();
             }
-        } else if (r == 0) {
+        } else if (r == 0) {	//当客户端发送EOF的时候或者Poller析构的时候，删除通道
             delete ch;
         } else if (errno == EINTR) {
         } else {
@@ -284,9 +288,9 @@ Channel::~Channel() {
 
 void Channel::enableRead(bool enable) {
     if (enable) {
-        events_ |= kReadEvent;
+        events_ |= kReadEvent;	//开启读事件
     } else {
-        events_ &= ~kReadEvent;
+        events_ &= ~kReadEvent;	//关闭读事件
     }
     poller_->updateChannel(this);
 }

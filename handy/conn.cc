@@ -19,15 +19,16 @@ void TcpConn::attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer)
     state_ = State::Handshaking;
     local_ = local;
     peer_ = peer;
-    delete channel_;
-    channel_ = new Channel(base, fd, kWriteEvent|kReadEvent);
+    delete channel_;	//删除监听通道
+    channel_ = new Channel(base, fd, kWriteEvent|kReadEvent);	//创建连接通道
     trace("tcp constructed %s - %s fd: %d",
         local_.toString().c_str(),
         peer_.toString().c_str(),
         fd);
+	//channel_->onRead([=] {handleRead(shared_from_this()); });
     TcpConnPtr con = shared_from_this();
-    con->channel_->onRead([=] { con->handleRead(con); });
-    con->channel_->onWrite([=] { con->handleWrite(con); });
+    con->channel_->onRead([=] { con->handleRead(con); });	//连接通道注册读事件，即TcpConn的读事件
+    con->channel_->onWrite([=] { con->handleWrite(con); });	//连接通道注册写事件
 }
 
 void TcpConn::connect(EventBase* base, const string& host, short port, int timeout, const string& localip) {
@@ -126,7 +127,7 @@ void TcpConn::handleRead(const TcpConnPtr& con) {
         }
         if (rd == -1 && errno == EINTR) {
             continue;
-        } else if (rd == -1 && (errno == EAGAIN || errno == EWOULDBLOCK) ) {
+        } else if (rd == -1 && (errno == EAGAIN || errno == EWOULDBLOCK) ) {	//读完数据后会走到这
             for(auto& idle: idleIds_) {
                 handyUpdateIdle(getBase(), idle);
             }
@@ -146,9 +147,9 @@ void TcpConn::handleRead(const TcpConnPtr& con) {
 int TcpConn::handleHandshake(const TcpConnPtr& con) {
     fatalif(state_ != Handshaking, "handleHandshaking called when state_=%d", state_);
     struct pollfd pfd;
-    pfd.fd = channel_->fd();
+    pfd.fd = channel_->fd();	//连接通道的fd
     pfd.events = POLLOUT | POLLERR;
-    int r = poll(&pfd, 1, 0);
+    int r = poll(&pfd, 1, 0);	//这个POLLOUT是怎么触发的？
     if (r == 1 && pfd.revents == POLLOUT) {
         channel_->enableReadWrite(true, false);
         state_ = State::Connected;
@@ -274,7 +275,7 @@ TcpServer::TcpServer(EventBases* bases):
 base_(bases->allocBase()),
 bases_(bases),
 listen_channel_(NULL),
-createcb_([]{ return TcpConnPtr(new TcpConn); })
+createcb_([]{ return TcpConnPtr(new TcpConn); })	//创建tcp连接
 {
 }
 
@@ -332,16 +333,16 @@ void TcpServer::handleAccept() {
         fatalif(r, "addFdFlag FD_CLOEXEC failed");
         EventBase* b = bases_->allocBase();
         auto addcon = [=] {
-            TcpConnPtr con = createcb_();
+            TcpConnPtr con = createcb_();	//构造TCP连接
             con->attach(b, cfd, local, peer);
             if (statecb_) {
-                con->onState(statecb_);
+                con->onState(statecb_);	//将TcpServer的状态回调传给TcpConn
             }
             if (readcb_) {
-                con->onRead(readcb_);
+                con->onRead(readcb_);	//将TcpServer的读回调传给TcpConn
             }
             if (msgcb_) {
-                con->onMsg(codec_->clone(), msgcb_);
+                con->onMsg(codec_->clone(), msgcb_);	//将TcpServer的消息回调传给TcpConn
             }
         };
         if (b == base_) {

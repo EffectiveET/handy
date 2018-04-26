@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 
+#define OS_LINUX
+
 namespace handy {
 namespace port{
 #ifdef OS_LINUX

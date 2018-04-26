@@ -11,11 +11,13 @@ namespace handy {
         TcpConn();
         virtual ~TcpConn();
         //可传入连接类型，返回智能指针
-        template<class C=TcpConn> static TcpConnPtr createConnection(EventBase* base, const std::string& host, short port,
+        template<class C=TcpConn>
+		static TcpConnPtr createConnection(EventBase* base, const std::string& host, short port,
                                    int timeout=0, const std::string& localip="") {
             TcpConnPtr con(new C); con->connect(base, host, port, timeout, localip); return con;
         }
-        template<class C=TcpConn> static TcpConnPtr createConnection(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer) {
+        template<class C=TcpConn>
+		static TcpConnPtr createConnection(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer) {
             TcpConnPtr con(new C); con->attach(base, fd, local, peer); return con;
         }
 
@@ -65,7 +67,21 @@ namespace handy {
         //远程地址的字符串
         std::string str() { return peer_.toString(); }
 
-    public:
+	public:
+		void handleRead(const TcpConnPtr& con);
+		void handleWrite(const TcpConnPtr& con);
+
+		ssize_t isend(const char* buf, size_t len);
+		void cleanup(const TcpConnPtr& con);
+		void connect(EventBase* base, const std::string& host, short port, int timeout, const std::string& localip);
+		void reconnect();
+		//对accept获得的连接fd创建连接通道，并注册连接通道的读写事件为TcpConn的handleRead()/handleWrite()
+		void attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer);
+
+		virtual int readImp(int fd, void* buf, size_t bytes) { return ::read(fd, buf, bytes); }
+		virtual int writeImp(int fd, const void* buf, size_t bytes) { return ::write(fd, buf, bytes); }
+		virtual int handleHandshake(const TcpConnPtr& con);
+	public:
         EventBase* base_;
         Channel* channel_;
         Buffer input_, output_;
@@ -79,16 +95,6 @@ namespace handy {
         int destPort_, connectTimeout_, reconnectInterval_;
         int64_t connectedTime_;
         std::unique_ptr<CodecBase> codec_;
-        void handleRead(const TcpConnPtr& con);
-        void handleWrite(const TcpConnPtr& con);
-        ssize_t isend(const char* buf, size_t len);
-        void cleanup(const TcpConnPtr& con);
-        void connect(EventBase* base, const std::string& host, short port, int timeout, const std::string& localip);
-        void reconnect();
-        void attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer);
-        virtual int readImp(int fd, void* buf, size_t bytes) { return ::read(fd, buf, bytes); }
-        virtual int writeImp(int fd, const void* buf, size_t bytes) { return ::write(fd, buf, bytes); }
-        virtual int handleHandshake(const TcpConnPtr& con);
     };
 
 //Tcp服务器

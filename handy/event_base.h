@@ -44,6 +44,7 @@ struct EventBase: public EventBases {
     void safeCall(Task&& task);
     void safeCall(const Task& task) { safeCall(Task(task)); }
     //分配一个事件派发器
+	//EventBase* allocBase() override { return this; }	//用override意义更明确
     virtual EventBase* allocBase() { return this; }
 
 public:
@@ -66,6 +67,7 @@ struct Channel: private noncopyable {
     //base为事件管理器，fd为通道内部的fd，events为通道关心的事件
     Channel(EventBase* base, int fd, int events);
     ~Channel();
+
     EventBase* getBase() { return base_; }
     int fd() { return fd_; }
     //通道id
@@ -92,7 +94,7 @@ struct Channel: private noncopyable {
     void handleWrite() { writecb_(); }
 protected:
     EventBase* base_;
-    PollerBase* poller_;
+    PollerBase* poller_;	//轮询器
     int fd_;
     short events_;
     int64_t id_;

@@ -16,9 +16,10 @@ const int kMaxEvents = 2000;
 const int kReadEvent = POLLIN;
 const int kWriteEvent = POLLOUT;
 
+//轮询器
 struct PollerBase: private noncopyable {
     int64_t id_;
-    int lastActive_;
+    int lastActive_;	//激活的事件数
     PollerBase(): lastActive_(-1) { static std::atomic<int64_t> id(0); id_ = ++id; }
     virtual void addChannel(Channel* ch) = 0;
     virtual void removeChannel(Channel* ch) = 0;
@@ -27,6 +28,7 @@ struct PollerBase: private noncopyable {
     virtual ~PollerBase(){};
 };
 
+//根据操作系统的不同选择不同的轮询方式，Linux下用Epoll，MAC用Kqueue
 PollerBase* createPoller();
 
 }

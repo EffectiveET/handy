@@ -48,6 +48,7 @@ PollerEpoll::~PollerEpoll() {
     info("poller %d destroyed", fd_);
 }
 
+//添加read/write通道
 void PollerEpoll::addChannel(Channel* ch) {
     struct epoll_event ev;
     memset(&ev, 0, sizeof(ev));
@@ -59,6 +60,7 @@ void PollerEpoll::addChannel(Channel* ch) {
     liveChannels_.insert(ch);
 }
 
+//更新read/write通道
 void PollerEpoll::updateChannel(Channel* ch) {
     struct epoll_event ev;
     memset(&ev, 0, sizeof(ev));
