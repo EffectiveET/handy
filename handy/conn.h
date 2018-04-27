@@ -43,7 +43,7 @@ namespace handy {
 
         //数据到达时回调
         void onRead(const TcpCallBack& cb) { assert(!readcb_); readcb_ = cb; };
-        //当tcp缓冲区可写时回调
+        //当tcp缓冲区可写时回调	//是LT模式吗？
         void onWritable(const TcpCallBack& cb) { writablecb_ = cb;}
         //tcp状态改变时回调
         void onState(const TcpCallBack& cb) { statecb_ = cb; }
@@ -100,17 +100,20 @@ namespace handy {
 //Tcp服务器
     struct TcpServer: private noncopyable {
         TcpServer(EventBases* bases);
+        ~TcpServer() { delete listen_channel_; }
         //return 0 on sucess, errno on error
         int bind(const std::string& host, short port, bool reusePort=false);
         static TcpServerPtr startServer(EventBases* bases, const std::string& host, short port, bool reusePort=false);
-        ~TcpServer() { delete listen_channel_; }
         Ip4Addr getAddr() { return addr_; }
         EventBase* getBase() { return base_; }
+
         void onConnCreate(const std::function<TcpConnPtr()>& cb) { createcb_ = cb; }
         void onConnState(const TcpCallBack& cb) { statecb_ = cb; }
         void onConnRead(const TcpCallBack& cb) { readcb_ = cb; assert(!msgcb_); }
         // 消息处理与Read回调冲突，只能调用一个
         void onConnMsg(CodecBase* codec, const MsgCallBack& cb) { codec_.reset(codec); msgcb_ = cb; assert(!readcb_); }
+	private:
+        void handleAccept();
     private:
         EventBase* base_;
         EventBases* bases_;
@@ -120,7 +123,6 @@ namespace handy {
         MsgCallBack msgcb_;
         std::function<TcpConnPtr()> createcb_;
         std::unique_ptr<CodecBase> codec_;
-        void handleAccept();
     };
 
     typedef std::function<std::string (const TcpConnPtr&, const std::string& msg)> RetMsgCallBack;

@@ -64,7 +64,6 @@ private:
 
 //通道，封装了可以进行epoll的一个fd
 struct Channel: private noncopyable {
-    //base为事件管理器，fd为通道内部的fd，events为通道关心的事件
     Channel(EventBase* base, int fd, int events);
     ~Channel();
 
@@ -93,10 +92,10 @@ struct Channel: private noncopyable {
     void handleRead() { readcb_(); }
     void handleWrite() { writecb_(); }
 protected:
-    EventBase* base_;
+    EventBase* base_;		//事件管理器
     PollerBase* poller_;	//轮询器
-    int fd_;
-    short events_;
+    int fd_;				//通道内部的fd
+    short events_;			//通道关心的事件,POLLIN,POLLOUT等事件
     int64_t id_;
     std::function<void()> readcb_, writecb_, errorcb_;
 };

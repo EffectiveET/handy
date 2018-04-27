@@ -39,7 +39,7 @@ struct EventsImp {
     EventBase* base_;
     PollerBase* poller_;
     std::atomic<bool> exit_;
-    int wakeupFds_[2];
+    int wakeupFds_[2];		//创建管道得到的fds，用作唤醒
     int nextTimeout_;
     SafeQueue<Task> tasks_;
     
@@ -68,9 +68,10 @@ struct EventsImp {
     void loop();
     void loop_once(int waitMs) { poller_->loop_once(std::min(waitMs, nextTimeout_)); handleTimeouts(); }
 
-	//下次调用读事件的时候delete Channel，即关闭读通道，不再执行task
+	//唤醒I/O线程
+	//下次调用读事件的时候
     void wakeup() {
-        int r = write(wakeupFds_[1], "", 1);
+        int r = write(wakeupFds_[1], "", 1);	//相当于条件信号，通知线程池可以取一个任务执行
         fatalif(r<=0, "write error wd %d %d %s", r, errno, strerror(errno));
     }
 
@@ -129,18 +130,21 @@ void EventsImp::init() {
     r = util::addFdFlag(wakeupFds_[1], FD_CLOEXEC);
     fatalif(r, "addFdFlag failed %d %s", errno, strerror(errno));
     trace("wakeup pipe created %d %d", wakeupFds_[0], wakeupFds_[1]);
+
+	//创建唤醒通道，该通道用于唤醒I/O线程
+	//向EPOLL添加该fd的读事件，当该读事件就绪的时候，就是唤醒I/O线程的时候，唤醒后调用下面的读事件处理器
     Channel* ch = new Channel(base_, wakeupFds_[0], kReadEvent);
 
 	//注册读事件处理器
     ch->onRead([=] {
         char buf[1024];
-        int r = (ch->fd() >= 0) ? ::read(ch->fd(), buf, sizeof buf) : 0;
+        int r = (ch->fd() >= 0) ? ::read(ch->fd(), buf, sizeof buf) : 0;	
         if (r > 0) {
             Task task;
-            while (tasks_.pop_wait(&task, 0)) {
+            while (tasks_.pop_wait(&task, 0)) {	//从任务队列取一个任务执行
                 task();
             }
-        } else if (r == 0) {	//当客户端发送EOF的时候或者Poller析构的时候，删除通道
+        } else if (r == 0) {	//当close(wakeupFd_[1])的时候，read(closewakeupFd_[0])会返回0
             delete ch;
         } else if (errno == EINTR) {
         } else {
@@ -160,6 +164,7 @@ void EventsImp::handleTimeouts() {
     refreshNearest();
 }
 
+//EventBase析构的时候close唤醒通道
 EventsImp::~EventsImp() {
     delete poller_;
     ::close(wakeupFds_[1]);

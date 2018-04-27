@@ -83,6 +83,7 @@ void PollerEpoll::removeChannel(Channel* ch) {
     }
 }
 
+//I/O线程，处理触发事件的Channel的读写回调
 void PollerEpoll::loop_once(int waitMs) {
     int64_t ticks = util::timeMilli();
     lastActive_ = epoll_wait(fd_, activeEvs_, kMaxEvents, waitMs);
