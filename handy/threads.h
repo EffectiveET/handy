@@ -13,8 +13,10 @@ namespace handy {
 
 template<typename T> struct SafeQueue: private std::mutex, private noncopyable {
     static const int wait_infinite = std::numeric_limits<int>::max();
+
     //0 不限制队列中的任务数
     SafeQueue(size_t capacity=0): capacity_(capacity), exit_(false) {}
+
     //队列满则返回false
     bool push(T&& v);
     //超时则返回T()
