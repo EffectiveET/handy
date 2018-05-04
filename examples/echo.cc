@@ -1,7 +1,10 @@
 #include <handy/handy.h>
+#include <handy/logging.h>
 using namespace handy;
 
 int main(int argc, const char* argv[]) {
+	setloglevel(Logger::LALL);
+	setlogfile("/home/onlyet/mount/project/handy/log/log2");
     EventBase base;
     Signal::signal(SIGINT, [&]{ base.exit(); });
     TcpServerPtr svr = TcpServer::startServer(&base, "", 6666);	//accept

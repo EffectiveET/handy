@@ -83,10 +83,10 @@ namespace handy {
 		virtual int handleHandshake(const TcpConnPtr& con);
 	public:
         EventBase* base_;
-        Channel* channel_;
-        Buffer input_, output_;
+        Channel* channel_;		//连接通道
+        Buffer input_, output_; 
         Ip4Addr local_, peer_;
-        State state_;
+        State state_;			//Tcp连接状态
         TcpCallBack readcb_, writablecb_, statecb_;
         std::list<IdleId> idleIds_;
         TimerId timeoutId_;

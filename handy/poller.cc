@@ -54,7 +54,7 @@ void PollerEpoll::addChannel(Channel* ch) {
     memset(&ev, 0, sizeof(ev));
     ev.events = ch->events();
     ev.data.ptr = ch;
-    trace("adding channel %lld fd %d events %d epoll %d", (long long)ch->id(), ch->fd(), ev.events, fd_);
+    trace("adding channel %lld, fd %d, events %d, epollfd %d", (long long)ch->id(), ch->fd(), ev.events, fd_);
     int r = epoll_ctl(fd_, EPOLL_CTL_ADD, ch->fd(), &ev);
     fatalif(r, "epoll_ctl add failed %d %s", errno, strerror(errno));
     liveChannels_.insert(ch);
@@ -88,7 +88,7 @@ void PollerEpoll::loop_once(int waitMs) {
     int64_t ticks = util::timeMilli();
     lastActive_ = epoll_wait(fd_, activeEvs_, kMaxEvents, waitMs);
     int64_t used = util::timeMilli()-ticks;
-    trace("epoll wait %d return %d errno %d used %lld millsecond",
+    trace("epoll wait %d, return %d, errno %d, used %lld millsecond",
           waitMs, lastActive_, errno, (long long)used);
     fatalif(lastActive_ == -1 && errno != EINTR, "epoll return error %d %s", errno, strerror(errno));
     while (--lastActive_ >= 0) {
@@ -97,10 +97,10 @@ void PollerEpoll::loop_once(int waitMs) {
         int events = activeEvs_[i].events;
         if (ch) {
             if (events & (kReadEvent | POLLERR)) {
-                trace("channel %lld fd %d handle read", (long long)ch->id(), ch->fd());
+                trace("channel %lld, fd %d, handle read", (long long)ch->id(), ch->fd());
                 ch->handleRead();
             } else if (events & kWriteEvent) {
-                trace("channel %lld fd %d handle write", (long long)ch->id(), ch->fd());
+                trace("channel %lld, fd %d, handle write", (long long)ch->id(), ch->fd());
                 ch->handleWrite();
             } else {
                 fatal("unexpected poller events");

@@ -27,8 +27,8 @@ void TcpConn::attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer)
         fd);
 	//channel_->onRead([=] {handleRead(shared_from_this()); });
     TcpConnPtr con = shared_from_this();
-    con->channel_->onRead([=] { con->handleRead(con); });	//连接通道注册读事件，即TcpConn的读事件
-    con->channel_->onWrite([=] { con->handleWrite(con); });	//连接通道注册写事件
+    con->channel_->onRead([=] { con->handleRead(con); });	//连接通道注册读事件，即TcpConn的handleRead
+    con->channel_->onWrite([=] { con->handleWrite(con); });	//连接通道注册写事件，即TcpConn的handleWrite
 }
 
 void TcpConn::connect(EventBase* base, const string& host, short port, int timeout, const string& localip) {
@@ -132,7 +132,7 @@ void TcpConn::handleRead(const TcpConnPtr& con) {
                 handyUpdateIdle(getBase(), idle);
             }
             if (readcb_ && input_.size()) {
-                readcb_(con);
+                readcb_(con);	//调用TcpServer传来的读回调
             }
             break;
         } else if (channel_->fd() == -1 || rd == 0 || rd == -1) {
@@ -151,7 +151,7 @@ int TcpConn::handleHandshake(const TcpConnPtr& con) {
     pfd.events = POLLOUT | POLLERR;
     int r = poll(&pfd, 1, 0);	//这个POLLOUT是怎么触发的？
     if (r == 1 && pfd.revents == POLLOUT) {
-        channel_->enableReadWrite(true, false);
+        channel_->enableReadWrite(true, false);	//为什么要将事件从读写改为读
         state_ = State::Connected;
         if (state_ == State::Connected) {
             connectedTime_ = util::timeMilli();
@@ -336,6 +336,7 @@ void TcpServer::handleAccept() {
         auto addcon = [=] {
             TcpConnPtr con = createcb_();	//构造TCP连接
 
+			//创建连接通道，连接通道注册read/write事件
             con->attach(b, cfd, local, peer);
 
             if (statecb_) {

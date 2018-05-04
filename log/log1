@@ -1,0 +1,168 @@
+2018/05/02-13:58:26.011913 c80 INFO handy/poller.cc:39 poller epoll 4 created
+2018/05/02-13:58:26.012016 c80 TRACE handy/event_base.cc:134 wakeup pipe created 5 6
+2018/05/02-13:58:26.012036 c80 TRACE handy/poller.cc:57 adding channel 1 fd 5 events 1 epoll 4
+2018/05/02-13:58:26.013302 c80 INFO handy/conn.cc:299 fd 7 listening at 0.0.0.0:6666
+2018/05/02-13:58:26.013319 c80 TRACE handy/poller.cc:57 adding channel 2 fd 7 events 1 epoll 4
+2018/05/02-13:58:36.024167 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10011 millsecond
+2018/05/02-13:58:38.176632 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 1 errno 0 used 2152 millsecond
+2018/05/02-13:58:38.176661 c80 TRACE handy/poller.cc:100 channel 2 fd 7 handle read
+2018/05/02-13:58:38.176693 c80 TRACE handy/poller.cc:57 adding channel 3 fd 8 events 5 epoll 4
+2018/05/02-13:58:38.176711 c80 TRACE handy/conn.cc:27 tcp constructed 127.0.0.1:6666 - 127.0.0.1:53696 fd: 8
+2018/05/02-13:58:38.176754 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 1 errno 11 used 0 millsecond
+2018/05/02-13:58:38.176762 c80 TRACE handy/poller.cc:103 channel 3 fd 8 handle write
+2018/05/02-13:58:38.176783 c80 TRACE handy/poller.cc:70 modifying channel 3 fd 8 events read 1 write 0 epoll 4
+2018/05/02-13:58:38.176800 c80 TRACE handy/conn.cc:159 tcp connected 127.0.0.1:6666 - 127.0.0.1:53696 fd 8
+2018/05/02-13:58:47.284547 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 1 errno 11 used 9108 millsecond
+2018/05/02-13:58:47.284613 c80 TRACE handy/poller.cc:100 channel 3 fd 8 handle read
+2018/05/02-13:58:47.284641 c80 TRACE handy/conn.cc:126 channel 3 fd 8 readed 7 bytes
+2018/05/02-13:58:47.284672 c80 TRACE handy/conn.cc:126 channel 3 fd 8 readed -1 bytes
+2018/05/02-13:58:47.284750 c80 TRACE handy/conn.cc:193 channel 3 fd 8 write 7 bytes
+2018/05/02-13:58:57.295999 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-13:59:07.307531 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-13:59:17.318518 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-13:59:27.331792 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-13:59:37.343477 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-13:59:47.358897 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-13:59:57.373299 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:00:07.375688 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10001 millsecond
+2018/05/02-14:00:17.387667 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-14:00:27.391642 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10003 millsecond
+2018/05/02-14:00:37.405205 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:00:47.419403 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:00:57.425911 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10005 millsecond
+2018/05/02-14:01:07.435020 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10009 millsecond
+2018/05/02-14:01:17.446357 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-14:01:27.457844 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:01:37.470398 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:01:47.483101 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-14:01:57.498367 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:02:07.511561 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:02:17.523507 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:02:27.548200 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:02:37.559495 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:02:47.571466 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-14:02:57.585896 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:03:07.588366 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10002 millsecond
+2018/05/02-14:03:17.602026 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:03:27.606901 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10004 millsecond
+2018/05/02-14:03:37.618547 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:03:47.631440 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:03:57.646247 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:04:07.659625 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:04:17.673038 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:04:27.688108 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:04:37.690522 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10001 millsecond
+2018/05/02-14:04:47.704972 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:04:57.716974 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:05:07.730544 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:05:17.738357 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10007 millsecond
+2018/05/02-14:05:27.753708 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:05:37.765307 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-14:05:47.770771 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10004 millsecond
+2018/05/02-14:05:57.785385 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:06:07.798021 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:06:17.799380 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10001 millsecond
+2018/05/02-14:06:27.816637 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:06:37.827972 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:06:47.834005 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10005 millsecond
+2018/05/02-14:06:57.836361 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10002 millsecond
+2018/05/02-14:07:07.851414 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:07:17.861396 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10009 millsecond
+2018/05/02-14:07:27.874446 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:07:37.887107 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:07:47.911552 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10023 millsecond
+2018/05/02-14:07:57.926314 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:08:07.940414 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:08:17.953208 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:08:27.966485 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:08:37.982825 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10015 millsecond
+2018/05/02-14:08:47.996654 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:08:58.004368 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10007 millsecond
+2018/05/02-14:09:08.012270 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10007 millsecond
+2018/05/02-14:09:18.025539 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:09:28.039608 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:09:38.055559 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10014 millsecond
+2018/05/02-14:09:48.057073 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10001 millsecond
+2018/05/02-14:09:58.068516 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:10:08.082230 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:10:18.084907 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10001 millsecond
+2018/05/02-14:10:28.087696 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10002 millsecond
+2018/05/02-14:10:38.100659 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:10:48.106897 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10004 millsecond
+2018/05/02-14:10:58.123890 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:11:08.137171 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:11:18.151119 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:11:28.155172 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10003 millsecond
+2018/05/02-14:11:38.162210 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10006 millsecond
+2018/05/02-14:11:48.176280 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:11:58.178939 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10001 millsecond
+2018/05/02-14:12:08.193568 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:12:14.069885 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 1 errno 11 used 5875 millsecond
+2018/05/02-14:12:14.071565 c80 TRACE handy/poller.cc:100 channel 3 fd 8 handle read
+2018/05/02-14:12:14.072582 c80 TRACE handy/conn.cc:126 channel 3 fd 8 readed 5 bytes
+2018/05/02-14:12:14.073826 c80 TRACE handy/conn.cc:126 channel 3 fd 8 readed -1 bytes
+2018/05/02-14:12:14.074751 c80 TRACE handy/conn.cc:193 channel 3 fd 8 write 5 bytes
+2018/05/02-14:12:14.075526 c80 TRACE handy/poller.cc:92 epoll wait 10000 return 1 errno 11 used 0 millsecond
+2018/05/02-14:12:14.076388 c80 TRACE handy/poller.cc:100 channel 3 fd 8 handle read
+2018/05/02-14:12:14.077127 c80 TRACE handy/conn.cc:126 channel 3 fd 8 readed 3 bytes
+2018/05/02-14:12:14.077972 c80 TRACE handy/conn.cc:126 channel 3 fd 8 readed -1 bytes
+2018/05/02-14:12:14.078737 c80 TRACE handy/conn.cc:193 channel 3 fd 8 write 3 bytes
+2018/05/02-14:12:20.232775 c80 TRACE handy/poller.cc:92 epoll wait 10000 return -1 errno 4 used 6153 millsecond
+2018/05/02-14:12:20.233714 c80 TRACE handy/poller.cc:92 epoll wait 0 return 1 errno 4 used 0 millsecond
+2018/05/02-14:12:20.234350 c80 TRACE handy/poller.cc:100 channel 1 fd 5 handle read
+2018/05/02-14:12:20.235101 c80 TRACE handy/event_base.cc:331 close channel 2 fd 7
+2018/05/02-14:12:20.235953 c80 TRACE handy/poller.cc:76 deleting channel 2 fd 7 epoll 4
+2018/05/02-14:12:20.236828 c80 INFO handy/poller.cc:43 destroying poller 4
+2018/05/02-14:12:20.237421 c80 TRACE handy/event_base.cc:331 close channel 1 fd 5
+2018/05/02-14:12:20.238054 c80 TRACE handy/poller.cc:76 deleting channel 1 fd 5 epoll 4
+2018/05/02-14:12:20.238739 c80 TRACE handy/event_base.cc:331 close channel 3 fd 8
+2018/05/02-14:12:20.239336 c80 TRACE handy/poller.cc:76 deleting channel 3 fd 8 epoll 4
+2018/05/02-14:12:20.240021 c80 TRACE handy/conn.cc:98 tcp closing 127.0.0.1:6666 - 127.0.0.1:53696 fd -1 4
+2018/05/02-14:12:20.240569 c80 TRACE handy/event_base.cc:357 tcp destroyed 127.0.0.1:6666 - 127.0.0.1:53696
+2018/05/02-14:12:20.241783 c80 INFO handy/poller.cc:48 poller 4 destroyed
+2018/05/02-14:12:32.388234 d1a INFO handy/poller.cc:39 poller epoll 4 created
+2018/05/02-14:12:32.388617 d1a TRACE handy/event_base.cc:134 wakeup pipe created 5 6
+2018/05/02-14:12:32.388893 d1a TRACE handy/poller.cc:57 adding channel 1 fd 5 events 1 epoll 4
+2018/05/02-14:12:32.389591 d1a INFO handy/conn.cc:299 fd 7 listening at 0.0.0.0:6666
+2018/05/02-14:12:32.389909 d1a TRACE handy/poller.cc:57 adding channel 2 fd 7 events 1 epoll 4
+2018/05/02-14:12:42.400864 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10010 millsecond
+2018/05/02-14:12:52.410806 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10008 millsecond
+2018/05/02-14:13:02.425448 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10014 millsecond
+2018/05/02-14:13:12.438367 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10012 millsecond
+2018/05/02-14:13:22.453357 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10014 millsecond
+2018/05/02-14:13:32.465064 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10011 millsecond
+2018/05/02-14:13:42.477182 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10011 millsecond
+2018/05/02-14:13:52.479002 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10001 millsecond
+2018/05/02-14:14:02.490428 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10010 millsecond
+2018/05/02-14:14:12.496128 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10005 millsecond
+2018/05/02-14:14:22.509278 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10012 millsecond
+2018/05/02-14:14:32.520542 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10008 millsecond
+2018/05/02-14:14:42.531731 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10010 millsecond
+2018/05/02-14:14:52.547407 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10012 millsecond
+2018/05/02-14:14:59.769174 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 1 errno 0 used 7221 millsecond
+2018/05/02-14:14:59.769924 d1a TRACE handy/poller.cc:100 channel 2 fd 7 handle read
+2018/05/02-14:14:59.770284 d1a TRACE handy/poller.cc:57 adding channel 3 fd 8 events 5 epoll 4
+2018/05/02-14:14:59.770637 d1a TRACE handy/conn.cc:27 tcp constructed 127.0.0.1:6666 - 127.0.0.1:53698 fd: 8
+2018/05/02-14:14:59.770975 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 1 errno 11 used 0 millsecond
+2018/05/02-14:14:59.771244 d1a TRACE handy/poller.cc:103 channel 3 fd 8 handle write
+2018/05/02-14:14:59.771580 d1a TRACE handy/poller.cc:70 modifying channel 3 fd 8 events read 1 write 0 epoll 4
+2018/05/02-14:14:59.771963 d1a TRACE handy/conn.cc:159 tcp connected 127.0.0.1:6666 - 127.0.0.1:53698 fd 8
+2018/05/02-14:15:09.783757 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10011 millsecond
+2018/05/02-14:15:19.786169 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10002 millsecond
+2018/05/02-14:15:29.799644 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10012 millsecond
+2018/05/02-14:15:39.813316 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:15:49.824418 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10010 millsecond
+2018/05/02-14:15:59.839005 d1a TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 11 used 10013 millsecond
+2018/05/02-14:16:04.550873 d1a TRACE handy/poller.cc:92 epoll wait 10000 return -1 errno 4 used 4710 millsecond
+2018/05/02-14:16:04.551883 d1a TRACE handy/poller.cc:92 epoll wait 0 return 1 errno 4 used 0 millsecond
+2018/05/02-14:16:04.552468 d1a TRACE handy/poller.cc:100 channel 1 fd 5 handle read
+2018/05/02-14:16:04.553078 d1a TRACE handy/event_base.cc:331 close channel 2 fd 7
+2018/05/02-14:16:04.553781 d1a TRACE handy/poller.cc:76 deleting channel 2 fd 7 epoll 4
+2018/05/02-14:16:04.554367 d1a INFO handy/poller.cc:43 destroying poller 4
+2018/05/02-14:16:04.554945 d1a TRACE handy/event_base.cc:331 close channel 1 fd 5
+2018/05/02-14:16:04.555462 d1a TRACE handy/poller.cc:76 deleting channel 1 fd 5 epoll 4
+2018/05/02-14:16:04.556008 d1a TRACE handy/event_base.cc:331 close channel 3 fd 8
+2018/05/02-14:16:04.556512 d1a TRACE handy/poller.cc:76 deleting channel 3 fd 8 epoll 4
+2018/05/02-14:16:04.557111 d1a TRACE handy/conn.cc:98 tcp closing 127.0.0.1:6666 - 127.0.0.1:53698 fd -1 4
+2018/05/02-14:16:04.557714 d1a TRACE handy/event_base.cc:357 tcp destroyed 127.0.0.1:6666 - 127.0.0.1:53698
+2018/05/02-14:16:04.558236 d1a INFO handy/poller.cc:48 poller 4 destroyed
