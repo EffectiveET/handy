@@ -36,20 +36,6 @@ struct IdleIdImp {
 };
 
 struct EventsImp {
-    EventBase* base_;
-    PollerBase* poller_;
-    std::atomic<bool> exit_;
-    int wakeupFds_[2];		//创建管道得到的fds，用作唤醒
-    int nextTimeout_;
-    SafeQueue<Task> tasks_;
-    
-    std::map<TimerId, TimerRepeatable> timerReps_;
-    std::map<TimerId, Task> timers_;
-    std::atomic<int64_t> timerSeq_;
-    std::map<int, std::list<IdleNode>> idleConns_;
-    std::set<TcpConnPtr> reconnectConns_;
-    bool idleEnabled;
-
     EventsImp(EventBase* base, int taskCap);
     ~EventsImp();
     void init();
@@ -77,6 +63,21 @@ struct EventsImp {
 
     bool cancel(TimerId timerid);
     TimerId runAt(int64_t milli, Task&& task, int64_t interval);
+
+public:
+	EventBase * base_;
+	PollerBase* poller_;
+	std::atomic<bool> exit_;
+	int wakeupFds_[2];		//创建管道得到的fds，用作唤醒
+	int nextTimeout_;
+	SafeQueue<Task> tasks_;
+
+	std::map<TimerId, TimerRepeatable> timerReps_;
+	std::map<TimerId, Task> timers_;
+	std::atomic<int64_t> timerSeq_;
+	std::map<int, std::list<IdleNode>> idleConns_;
+	std::set<TcpConnPtr> reconnectConns_;
+	bool idleEnabled;
 };
 
 EventBase::EventBase(int taskCapacity) {
@@ -122,7 +123,8 @@ void EventsImp::loop() {
     loop_once(0);
 }
 
-void EventsImp::init() {
+void EventsImp::init() 
+{
     int r = pipe(wakeupFds_);
     fatalif(r, "pipe failed %d %s", errno, strerror(errno));
     r = util::addFdFlag(wakeupFds_[0], FD_CLOEXEC);		//FD_CLOEXEC ：使进程和子进程调用exec*()函数时，会close套接字
@@ -279,6 +281,7 @@ void MultiBase::loop() {
     }
 }
 
+//构造通道的时候要将通道添加到轮询器中
 Channel::Channel(EventBase* base, int fd, int events): base_(base), fd_(fd), events_(events) {
     fatalif(net::setNonBlock(fd_) < 0, "channel set non block failed");
     static atomic<int64_t> id(0);

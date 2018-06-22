@@ -19,7 +19,7 @@ void TcpConn::attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer)
     state_ = State::Handshaking;
     local_ = local;
     peer_ = peer;
-    delete channel_;	//删除监听通道
+    delete channel_;	//这里为什么要删除？
     channel_ = new Channel(base, fd, kWriteEvent|kReadEvent);	//创建连接通道
     trace("tcp constructed %s - %s fd: %d",
         local_.toString().c_str(),
@@ -27,8 +27,8 @@ void TcpConn::attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer)
         fd);
 	//channel_->onRead([=] {handleRead(shared_from_this()); });
     TcpConnPtr con = shared_from_this();
-    con->channel_->onRead([=] { con->handleRead(con); });	//连接通道注册读事件，即TcpConn的读事件
-    con->channel_->onWrite([=] { con->handleWrite(con); });	//连接通道注册写事件
+    con->channel_->onRead([=] { con->handleRead(con); });	//连接通道注册读事件，即TcpConn的handleRead
+    con->channel_->onWrite([=] { con->handleWrite(con); });	//连接通道注册写事件，即TcpConn的handleWrite
 }
 
 void TcpConn::connect(EventBase* base, const string& host, short port, int timeout, const string& localip) {
@@ -132,7 +132,7 @@ void TcpConn::handleRead(const TcpConnPtr& con) {
                 handyUpdateIdle(getBase(), idle);
             }
             if (readcb_ && input_.size()) {
-                readcb_(con);
+                readcb_(con);	//调用TcpServer传来的读回调
             }
             break;
         } else if (channel_->fd() == -1 || rd == 0 || rd == -1) {
@@ -151,7 +151,7 @@ int TcpConn::handleHandshake(const TcpConnPtr& con) {
     pfd.events = POLLOUT | POLLERR;
     int r = poll(&pfd, 1, 0);	//这个POLLOUT是怎么触发的？
     if (r == 1 && pfd.revents == POLLOUT) {
-        channel_->enableReadWrite(true, false);
+        channel_->enableReadWrite(true, false);	//为什么要将事件从读写改为读
         state_ = State::Connected;
         if (state_ == State::Connected) {
             connectedTime_ = util::timeMilli();
@@ -297,8 +297,9 @@ int TcpServer::bind(const std::string &host, short port, bool reusePort) {
     r = listen(fd, 20);
     fatalif(r, "listen failed %d %s", errno, strerror(errno));
     info("fd %d listening at %s", fd, addr_.toString().c_str());
-    listen_channel_ = new Channel(base_, fd, kReadEvent);
-    listen_channel_->onRead([this]{ handleAccept(); });
+
+    listen_channel_ = new Channel(base_, fd, kReadEvent);	//监听通道关心读事件
+    listen_channel_->onRead([this]{ handleAccept(); });	//监听通道注册读事件
     return 0;
 }
 
@@ -334,7 +335,10 @@ void TcpServer::handleAccept() {
         EventBase* b = bases_->allocBase();
         auto addcon = [=] {
             TcpConnPtr con = createcb_();	//构造TCP连接
+
+			//创建连接通道，连接通道注册read/write事件
             con->attach(b, cfd, local, peer);
+
             if (statecb_) {
                 con->onState(statecb_);	//将TcpServer的状态回调传给TcpConn
             }
@@ -345,11 +349,13 @@ void TcpServer::handleAccept() {
                 con->onMsg(codec_->clone(), msgcb_);	//将TcpServer的消息回调传给TcpConn
             }
         };
-        if (b == base_) {
+        if (b == base_) {	
             addcon();
-        } else {
+			printf("b==base_\n");
+        } else {					//什么情况下调用safeCall
             b->safeCall(move(addcon));
-        }
+			printf("b!=base_\n");
+		}
     }
     if (lfd >= 0 && errno != EAGAIN && errno != EINTR) {
         warn("accept return %d  %d %s", cfd, errno, strerror(errno));
