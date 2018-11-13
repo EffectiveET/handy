@@ -2,7 +2,10 @@
 #include "handy-imp.h"
 #include "poller.h"
 
+#ifdef _VS
 #define OS_LINUX
+#endif
+
 
 namespace handy {
 
