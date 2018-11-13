@@ -1,20 +1,18 @@
 #include "conn.h"
-#include "logging.h"
-#include <poll.h>
 #include <fcntl.h>
+#include <poll.h>
+#include "logging.h"
 #include "poller.h"
-
 
 using namespace std;
 namespace handy {
 
-void handyUnregisterIdle(EventBase* base, const IdleId& idle);
-void handyUpdateIdle(EventBase* base, const IdleId& idle);
+void handyUnregisterIdle(EventBase *base, const IdleId &idle);
+void handyUpdateIdle(EventBase *base, const IdleId &idle);
 
-void TcpConn::attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer)
-{
-    fatalif((destPort_<=0 && state_ != State::Invalid) || (destPort_>=0 && state_ != State::Handshaking),
-        "you should use a new TcpConn to attach. state: %d", state_);
+void TcpConn::attach(EventBase *base, int fd, Ip4Addr local, Ip4Addr peer) {
+    fatalif((destPort_ <= 0 && state_ != State::Invalid) || (destPort_ >= 0 && state_ != State::Handshaking),
+            "you should use a new TcpConn to attach. state: %d", state_);
     base_ = base;
     state_ = State::Handshaking;
     local_ = local;
@@ -31,9 +29,8 @@ void TcpConn::attach(EventBase* base, int fd, Ip4Addr local, Ip4Addr peer)
     con->channel_->onWrite([=] { con->handleWrite(con); });	//连接通道注册写事件，即TcpConn的handleWrite
 }
 
-void TcpConn::connect(EventBase* base, const string& host, short port, int timeout, const string& localip) {
-    fatalif(state_ != State::Invalid && state_ != State::Closed && state_ != State::Failed,
-            "current state is bad state to connect. state: %d", state_);
+void TcpConn::connect(EventBase *base, const string &host, short port, int timeout, const string &localip) {
+    fatalif(state_ != State::Invalid && state_ != State::Closed && state_ != State::Failed, "current state is bad state to connect. state: %d", state_);
     destHost_ = host;
     destPort_ = port;
     connectTimeout_ = timeout;
@@ -41,14 +38,14 @@ void TcpConn::connect(EventBase* base, const string& host, short port, int timeo
     localIp_ = localip;
     Ip4Addr addr(host, port);
     int fd = socket(AF_INET, SOCK_STREAM, 0);
-    fatalif(fd<0, "socket failed %d %s", errno, strerror(errno));
+    fatalif(fd < 0, "socket failed %d %s", errno, strerror(errno));
     net::setNonBlock(fd);
     int t = util::addFdFlag(fd, FD_CLOEXEC);
     fatalif(t, "addFdFlag FD_CLOEXEC failed %d %s", t, strerror(t));
     int r = 0;
     if (localip.size()) {
         Ip4Addr addr(localip, 0);
-        r = ::bind(fd,(struct sockaddr *)&addr.getAddr(),sizeof(struct sockaddr));
+        r = ::bind(fd, (struct sockaddr *) &addr.getAddr(), sizeof(struct sockaddr));
         error("bind to %s failed error %d %s", addr.toString().c_str(), errno, strerror(errno));
     }
     if (r == 0) {
@@ -71,7 +68,9 @@ void TcpConn::connect(EventBase* base, const string& host, short port, int timeo
     if (timeout) {
         TcpConnPtr con = shared_from_this();
         timeoutId_ = base->runAfter(timeout, [con] {
-            if (con->getState() == Handshaking) { con->channel_->close(); }
+            if (con->getState() == Handshaking) {
+                con->channel_->close();
+            }
         });
     }
 }
@@ -79,11 +78,14 @@ void TcpConn::connect(EventBase* base, const string& host, short port, int timeo
 void TcpConn::close() {
     if (channel_) {
         TcpConnPtr con = shared_from_this();
-        getBase()->safeCall([con]{ if (con->channel_) con->channel_->close(); });
+        getBase()->safeCall([con] {
+            if (con->channel_)
+                con->channel_->close();
+        });
     }
 }
 
-void TcpConn::cleanup(const TcpConnPtr& con) {
+void TcpConn::cleanup(const TcpConnPtr &con) {
     if (readcb_ && input_.size()) {
         readcb_(con);
     }
@@ -92,24 +94,21 @@ void TcpConn::cleanup(const TcpConnPtr& con) {
     } else {
         state_ = State::Closed;
     }
-    trace("tcp closing %s - %s fd %d %d",
-        local_.toString().c_str(),
-        peer_.toString().c_str(),
-        channel_ ? channel_->fd(): -1, errno);
+    trace("tcp closing %s - %s fd %d %d", local_.toString().c_str(), peer_.toString().c_str(), channel_ ? channel_->fd() : -1, errno);
     getBase()->cancel(timeoutId_);
     if (statecb_) {
         statecb_(con);
     }
-    if (reconnectInterval_ >= 0 && !getBase()->exited()) { //reconnect
+    if (reconnectInterval_ >= 0 && !getBase()->exited()) {  // reconnect
         reconnect();
         return;
     }
-    for (auto& idle: idleIds_) {
+    for (auto &idle : idleIds_) {
         handyUnregisterIdle(getBase(), idle);
     }
-    //channel may have hold TcpConnPtr, set channel_ to NULL before delete
+    // channel may have hold TcpConnPtr, set channel_ to NULL before delete
     readcb_ = writablecb_ = statecb_ = nullptr;
-    Channel* ch = channel_;
+    Channel *ch = channel_;
     channel_ = NULL;
     delete ch;
 }
@@ -125,7 +124,7 @@ void TcpConn::handleRead(const TcpConnPtr& con) {
         int rd = 0;
         if (channel_->fd() >= 0) {
             rd = readImp(channel_->fd(), input_.end(), input_.space());
-            trace("channel %lld fd %d readed %d bytes", (long long)channel_->id(), channel_->fd(), rd);
+            trace("channel %lld fd %d readed %d bytes", (long long) channel_->id(), channel_->fd(), rd);
         }
         if (rd == -1 && errno == EINTR) {
             continue;	//遇到中断信号缓冲区失效了？
@@ -140,13 +139,13 @@ void TcpConn::handleRead(const TcpConnPtr& con) {
         } else if (channel_->fd() == -1 || rd == 0 || rd == -1) {
             cleanup(con);
             break;
-        } else { //rd > 0
+        } else {  // rd > 0
             input_.addSize(rd);
         }
     }
 }
 
-int TcpConn::handleHandshake(const TcpConnPtr& con) {
+int TcpConn::handleHandshake(const TcpConnPtr &con) {
     fatalif(state_ != Handshaking, "handleHandshaking called when state_=%d", state_);
     struct pollfd pfd;
     pfd.fd = channel_->fd();	//连接通道的fd
@@ -157,8 +156,7 @@ int TcpConn::handleHandshake(const TcpConnPtr& con) {
         state_ = State::Connected;
         if (state_ == State::Connected) {
             connectedTime_ = util::timeMilli();
-            trace("tcp connected %s - %s fd %d",
-                local_.toString().c_str(), peer_.toString().c_str(), channel_->fd());
+            trace("tcp connected %s - %s fd %d", local_.toString().c_str(), peer_.toString().c_str(), channel_->fd());
             if (statecb_) {
                 statecb_(con);
             }
@@ -171,7 +169,7 @@ int TcpConn::handleHandshake(const TcpConnPtr& con) {
     return 0;
 }
 
-void TcpConn::handleWrite(const TcpConnPtr& con) {
+void TcpConn::handleWrite(const TcpConnPtr &con) {
     if (state_ == State::Handshaking) {
         handleHandshake(con);
     } else if (state_ == State::Connected) {
@@ -180,7 +178,7 @@ void TcpConn::handleWrite(const TcpConnPtr& con) {
         if (output_.empty() && writablecb_) {
             writablecb_(con);
         }
-        if (output_.empty() && channel_->writeEnabled()) { // writablecb_ may write something
+        if (output_.empty() && channel_->writeEnabled()) {  // writablecb_ may write something
             channel_->enableWrite(false);
         }
     } else {
@@ -188,11 +186,11 @@ void TcpConn::handleWrite(const TcpConnPtr& con) {
     }
 }
 
-ssize_t TcpConn::isend(const char* buf, size_t len) {
+ssize_t TcpConn::isend(const char *buf, size_t len) {
     size_t sended = 0;
     while (len > sended) {
         ssize_t wd = writeImp(channel_->fd(), buf + sended, len - sended);
-        trace("channel %lld fd %d write %ld bytes", (long long)channel_->id(), channel_->fd(), wd);
+        trace("channel %lld fd %d write %ld bytes", (long long) channel_->id(), channel_->fd(), wd);
         if (wd > 0) {
             sended += wd;
             continue;
@@ -204,18 +202,18 @@ ssize_t TcpConn::isend(const char* buf, size_t len) {
             }
             break;
         } else {
-            error("write error: channel %lld fd %d wd %ld %d %s", (long long)channel_->id(), channel_->fd(), wd, errno, strerror(errno));
+            error("write error: channel %lld fd %d wd %ld %d %s", (long long) channel_->id(), channel_->fd(), wd, errno, strerror(errno));
             break;
         }
     }
     return sended;
 }
 
-void TcpConn::send(Buffer& buf) {
+void TcpConn::send(Buffer &buf) {
     if (channel_) {
-        if (channel_->writeEnabled()) { //just full
+        if (channel_->writeEnabled()) {  // just full
             output_.absorb(buf);
-        } 
+        }
         if (buf.size()) {
             ssize_t sended = isend(buf.begin(), buf.size());
             buf.consume(sended);
@@ -227,12 +225,11 @@ void TcpConn::send(Buffer& buf) {
             }
         }
     } else {
-        warn("connection %s - %s closed, but still writing %lu bytes",
-            local_.toString().c_str(), peer_.toString().c_str(), buf.size());
+        warn("connection %s - %s closed, but still writing %lu bytes", local_.toString().c_str(), peer_.toString().c_str(), buf.size());
     }
 }
 
-void TcpConn::send(const char* buf, size_t len) {
+void TcpConn::send(const char *buf, size_t len) {
     if (channel_) {
         if (output_.empty()) {
             ssize_t sended = isend(buf, len);
@@ -243,15 +240,14 @@ void TcpConn::send(const char* buf, size_t len) {
             output_.append(buf, len);
         }
     } else {
-        warn("connection %s - %s closed, but still writing %lu bytes",
-            local_.toString().c_str(), peer_.toString().c_str(), len);
+        warn("connection %s - %s closed, but still writing %lu bytes", local_.toString().c_str(), peer_.toString().c_str(), len);
     }
 }
 
-void TcpConn::onMsg(CodecBase* codec, const MsgCallBack& cb) {
+void TcpConn::onMsg(CodecBase *codec, const MsgCallBack &cb) {
     assert(!readcb_);
     codec_.reset(codec);
-    onRead([cb](const TcpConnPtr& con) {
+    onRead([cb](const TcpConnPtr &con) {
         int r = 1;
         while (r) {
             Slice msg;
@@ -277,9 +273,8 @@ TcpServer::TcpServer(EventBases* bases):
 base_(bases->allocBase()),
 bases_(bases),
 listen_channel_(NULL),
-createcb_([]{ return TcpConnPtr(new TcpConn); })	//创建tcp连接
-{
-}
+createcb_([]{ return TcpConnPtr(new TcpConn); }) {}	//创建tcp连接
+
 
 int TcpServer::bind(const std::string &host, short port, bool reusePort) {
     addr_ = Ip4Addr(host, port);
@@ -290,7 +285,7 @@ int TcpServer::bind(const std::string &host, short port, bool reusePort) {
     fatalif(r, "set socket reuse port option failed");
     r = util::addFdFlag(fd, FD_CLOEXEC);
     fatalif(r, "addFdFlag FD_CLOEXEC failed");
-    r = ::bind(fd,(struct sockaddr *)&addr_.getAddr(),sizeof(struct sockaddr));
+    r = ::bind(fd, (struct sockaddr *) &addr_.getAddr(), sizeof(struct sockaddr));
     if (r) {
         close(fd);
         error("bind to %s failed %d %s", addr_.toString().c_str(), errno, strerror(errno));
@@ -305,7 +300,7 @@ int TcpServer::bind(const std::string &host, short port, bool reusePort) {
     return 0;
 }
 
-TcpServerPtr TcpServer::startServer(EventBases* bases, const std::string& host, short port, bool reusePort) {
+TcpServerPtr TcpServer::startServer(EventBases *bases, const std::string &host, short port, bool reusePort) {
     TcpServerPtr p(new TcpServer(bases));
     int r = p->bind(host, port, reusePort);
     if (r) {
@@ -319,22 +314,22 @@ void TcpServer::handleAccept() {
     socklen_t rsz = sizeof(raddr);
     int lfd = listen_channel_->fd();
     int cfd;
-    while (lfd >= 0 && (cfd = accept(lfd,(struct sockaddr *)&raddr,&rsz))>=0) {
+    while (lfd >= 0 && (cfd = accept(lfd, (struct sockaddr *) &raddr, &rsz)) >= 0) {
         sockaddr_in peer, local;
         socklen_t alen = sizeof(peer);
-        int r = getpeername(cfd, (sockaddr*)&peer, &alen);
+        int r = getpeername(cfd, (sockaddr *) &peer, &alen);
         if (r < 0) {
             error("get peer name failed %d %s", errno, strerror(errno));
             continue;
         }
-        r = getsockname(cfd, (sockaddr*)&local, &alen);
+        r = getsockname(cfd, (sockaddr *) &local, &alen);
         if (r < 0) {
             error("getsockname failed %d %s", errno, strerror(errno));
             continue;
         }
         r = util::addFdFlag(cfd, FD_CLOEXEC);
         fatalif(r, "addFdFlag FD_CLOEXEC failed");
-        EventBase* b = bases_->allocBase();
+        EventBase *b = bases_->allocBase();
         auto addcon = [=] {
             TcpConnPtr con = createcb_();	//构造TCP连接
 
@@ -364,20 +359,23 @@ void TcpServer::handleAccept() {
     }
 }
 
-HSHAPtr HSHA::startServer(EventBase* base, const std::string& host, short port, int threads) {
+HSHAPtr HSHA::startServer(EventBase *base, const std::string &host, short port, int threads) {
     HSHAPtr p = HSHAPtr(new HSHA(threads));
     p->server_ = TcpServer::startServer(base, host, port);
     return p->server_ ? p : NULL;
 }
 
-void HSHA::onMsg(CodecBase* codec, const RetMsgCallBack& cb) {
-    server_->onConnMsg(codec, [this, cb](const TcpConnPtr& con, Slice msg) {
+void HSHA::onMsg(CodecBase *codec, const RetMsgCallBack &cb) {
+    server_->onConnMsg(codec, [this, cb](const TcpConnPtr &con, Slice msg) {
         std::string input = msg;
-        threadPool_.addTask([=]{
+        threadPool_.addTask([=] {
             std::string output = cb(con, input);
-            server_->getBase()->safeCall([=] {if (output.size()) con->sendMsg(output); });
+            server_->getBase()->safeCall([=] {
+                if (output.size())
+                    con->sendMsg(output);
+            });
         });
     });
 }
 
-}
+}  // namespace handy
