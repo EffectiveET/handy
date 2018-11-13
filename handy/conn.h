@@ -121,9 +121,9 @@ namespace handy {
         EventBases* bases_;
         Ip4Addr addr_;
         Channel* listen_channel_;
-        TcpCallBack statecb_, readcb_;
+        TcpCallBack statecb_, readcb_;			//readcb_：将TcpServer的读回调传给TcpConn，将TcpServer的状态回调传给TcpConn（两者都是由用户传递）
         MsgCallBack msgcb_;
-        std::function<TcpConnPtr()> createcb_;
+        std::function<TcpConnPtr()> createcb_;	//用于构造TcpConn
         std::unique_ptr<CodecBase> codec_;
     };
 

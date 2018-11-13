@@ -20,8 +20,8 @@ struct noncopyable {
 
 struct util {
     static std::string format(const char* fmt, ...);
-    static int64_t timeMicro();
-    static int64_t timeMilli() { return timeMicro()/1000; }
+    static int64_t timeMicro();	//微秒
+    static int64_t timeMilli() { return timeMicro()/1000; }	//毫秒
     static int64_t steadyMicro();
     static int64_t steadyMilli() { return steadyMicro()/1000; }
     static std::string readableTime(time_t t);

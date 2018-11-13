@@ -1279,3 +1279,18 @@
 2018/05/02-17:46:59.305148 d71 TRACE handy/event_base.cc:331 close channel 3 fd 8
 2018/05/02-17:46:59.305442 d71 TRACE handy/poller.cc:76 deleting channel 3 fd 8 epoll 4
 2018/05/02-17:46:59.305852 d71 TRACE handy/event_base.cc:357 tcp destroyed 127.0.0.1:6666 - 127.0.0.1:53700
+2018/06/14-15:53:15.758845 a2c INFO handy/poller.cc:39 poller epoll 4 created
+2018/06/14-15:53:15.759817 a2c TRACE handy/event_base.cc:134 wakeup pipe created 5 6
+2018/06/14-15:53:15.760185 a2c TRACE handy/poller.cc:57 adding channel 1 fd 5 events 1 epoll 4
+2018/06/14-15:53:15.761966 a2c INFO handy/conn.cc:299 fd 7 listening at 0.0.0.0:6666
+2018/06/14-15:53:15.762335 a2c TRACE handy/poller.cc:57 adding channel 2 fd 7 events 1 epoll 4
+2018/06/14-15:53:25.771711 a2c TRACE handy/poller.cc:92 epoll wait 10000 return 0 errno 0 used 10009 millsecond
+2018/06/14-15:53:31.470824 a2c TRACE handy/poller.cc:92 epoll wait 10000 return -1 errno 4 used 5698 millsecond
+2018/06/14-15:53:31.471557 a2c TRACE handy/poller.cc:92 epoll wait 0 return 1 errno 4 used 0 millsecond
+2018/06/14-15:53:31.472082 a2c TRACE handy/poller.cc:100 channel 1 fd 5 handle read
+2018/06/14-15:53:31.472556 a2c TRACE handy/event_base.cc:331 close channel 2 fd 7
+2018/06/14-15:53:31.473018 a2c TRACE handy/poller.cc:76 deleting channel 2 fd 7 epoll 4
+2018/06/14-15:53:31.473472 a2c INFO handy/poller.cc:43 destroying poller 4
+2018/06/14-15:53:31.473885 a2c TRACE handy/event_base.cc:331 close channel 1 fd 5
+2018/06/14-15:53:31.474379 a2c TRACE handy/poller.cc:76 deleting channel 1 fd 5 epoll 4
+2018/06/14-15:53:31.474817 a2c INFO handy/poller.cc:48 poller 4 destroyed

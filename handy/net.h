@@ -44,7 +44,7 @@ struct Buffer {
     char* end() const  { return buf_ + e_; }
     char* makeRoom(size_t len);
     void makeRoom() { if (space() < exp_) expand(0);}
-    size_t space() const  { return cap_ - e_; }
+    size_t space() const  { return cap_ - e_; }	//缓存可用空间
     void addSize(size_t len) { e_ += len; }
     char* allocRoom(size_t len) { char* p = makeRoom(len); addSize(len); return p; }
     Buffer& append(const char* p, size_t len) { memcpy(allocRoom(len), p, len); return *this; }
@@ -61,7 +61,7 @@ private:
     char* buf_;
     size_t b_, e_, cap_, exp_;
     void moveHead() { std::copy(begin(), end(), buf_); e_ -= b_; b_ = 0; }
-    void expand(size_t len);
+    void expand(size_t len);	//增加buffer长度，类似于vector
     void copyFrom(const Buffer& b);
 };
 

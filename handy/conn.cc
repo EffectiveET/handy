@@ -114,19 +114,21 @@ void TcpConn::cleanup(const TcpConnPtr& con) {
     delete ch;
 }
 
+//循环read，直到读完返回EAGAIN
+//用的应该是LT模式，但是采取的是ET模式的读法
 void TcpConn::handleRead(const TcpConnPtr& con) {
     if (state_ == State::Handshaking && handleHandshake(con)) {
         return;
     }
     while(state_ == State::Connected) {
-        input_.makeRoom();
+        input_.makeRoom();	//如果buffer容量不够，则增大
         int rd = 0;
         if (channel_->fd() >= 0) {
             rd = readImp(channel_->fd(), input_.end(), input_.space());
             trace("channel %lld fd %d readed %d bytes", (long long)channel_->id(), channel_->fd(), rd);
         }
         if (rd == -1 && errno == EINTR) {
-            continue;
+            continue;	//遇到中断信号缓冲区失效了？
         } else if (rd == -1 && (errno == EAGAIN || errno == EWOULDBLOCK) ) {	//读完数据后会走到这
             for(auto& idle: idleIds_) {
                 handyUpdateIdle(getBase(), idle);
@@ -149,9 +151,9 @@ int TcpConn::handleHandshake(const TcpConnPtr& con) {
     struct pollfd pfd;
     pfd.fd = channel_->fd();	//连接通道的fd
     pfd.events = POLLOUT | POLLERR;
-    int r = poll(&pfd, 1, 0);	//这个POLLOUT是怎么触发的？
+    int r = poll(&pfd, 1, 0);	//注册了POLLOUT事件，下次调用poll或者epollwait就会触发
     if (r == 1 && pfd.revents == POLLOUT) {
-        channel_->enableReadWrite(true, false);	//为什么要将事件从读写改为读
+        channel_->enableReadWrite(true, false);	//对连接通道关联的poller epoll注册读事件
         state_ = State::Connected;
         if (state_ == State::Connected) {
             connectedTime_ = util::timeMilli();

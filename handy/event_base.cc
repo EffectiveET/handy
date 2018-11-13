@@ -21,7 +21,7 @@ struct TimerRepeatable {
 
 struct IdleNode {
     TcpConnPtr con_;
-    int64_t updated_;
+    int64_t updated_;	//秒
     TcpCallBack cb_;
 };
 
@@ -208,7 +208,7 @@ void EventsImp::unregisterIdle(const IdleId& id) {
 void EventsImp::updateIdle(const IdleId& id) {
     trace("update idle");
     id->iter_->updated_ = util::timeMilli() / 1000;
-    id->lst_->splice(id->lst_->end(), *id->lst_, id->iter_);
+    id->lst_->splice(id->lst_->end(), *id->lst_, id->iter_);	//将iter_拼接到链表尾部
 }
 
 void EventsImp::refreshNearest(const TimerId* tid){
