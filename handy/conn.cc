@@ -150,7 +150,7 @@ int TcpConn::handleHandshake(const TcpConnPtr &con) {
     struct pollfd pfd;
     pfd.fd = channel_->fd();	//连接通道的fd
     pfd.events = POLLOUT | POLLERR;
-    int r = poll(&pfd, 1, 0);	//注册了POLLOUT事件，下次调用poll或者epollwait就会触发
+    int r = poll(&pfd, 1, 0);	
     if (r == 1 && pfd.revents == POLLOUT) {
         channel_->enableReadWrite(true, false);	//对连接通道关联的poller epoll注册读事件
         state_ = State::Connected;

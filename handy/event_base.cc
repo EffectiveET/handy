@@ -249,11 +249,14 @@ void EventsImp::repeatableTimeout(TimerRepeatable *tr) {
     tr->cb();
 }
 
-TimerId EventsImp::runAt(int64_t milli, Task &&task, int64_t interval) {
-    if (exit_) {
+TimerId EventsImp::runAt(int64_t milli, Task &&task, int64_t interval) 
+{
+    if (exit_) 
+	{
         return TimerId();
     }
-    if (interval) {
+    if (interval) 
+	{
         TimerId tid{-milli, ++timerSeq_};
         TimerRepeatable &rtr = timerReps_[tid];
         rtr = {milli, interval, {milli, ++timerSeq_}, move(task)};
@@ -261,7 +264,9 @@ TimerId EventsImp::runAt(int64_t milli, Task &&task, int64_t interval) {
         timers_[tr->timerid] = [this, tr] { repeatableTimeout(tr); };
         refreshNearest(&tr->timerid);
         return tid;
-    } else {
+    } 
+	else 
+	{
         TimerId tid{milli, ++timerSeq_};
         timers_.insert({tid, move(task)});
         refreshNearest(&tid);
