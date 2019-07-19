@@ -26,49 +26,66 @@ HttpMsg::Result HttpMsg::tryDecode_(Slice buf, bool copyBody, Slice *line1) {
     if (complete_) {
         return Complete;
     }
-    if (!contentLen_) {
+    if (!contentLen_) 
+    {
         const char *p = buf.begin();
         Slice req;
         // scanned at most points to first <cr> when empty line
-        while (buf.size() >= scanned_ + 4) {
-            if (p[scanned_] == '\r' && memcmp(p + scanned_, "\r\n\r\n", 4) == 0) {
+        while (buf.size() >= scanned_ + 4) 
+        {
+            if (p[scanned_] == '\r' && memcmp(p + scanned_, "\r\n\r\n", 4) == 0) 
+            {
                 req = Slice(p, p + scanned_);
                 break;
             }
             scanned_++;
         }
-        if (req.empty()) {  // header not complete
+        if (req.empty()) 
+        {  
+            // header not complete
             return NotComplete;
         }
 
         *line1 = req.eatLine();
-        while (req.size()) {
+        while (req.size()) 
+        {
             req.eat(2);
             Slice ln = req.eatLine();
             Slice k = ln.eatWord();
             ln.trimSpace();
-            if (k.size() && ln.size() && k.back() == ':') {
-                for (size_t i = 0; i < k.size(); i++) {
+            if (k.size() && ln.size() && k.back() == ':') 
+            {
+                for (size_t i = 0; i < k.size(); i++) 
+                {
                     ((char *) k.data())[i] = tolower(k[i]);
                 }
                 headers[k.sub(0, -1)] = ln;
-            } else if (k.empty() && ln.empty() && req.empty()) {
+            }
+            else if (k.empty() && ln.empty() && req.empty())
+            {
                 break;
-            } else {
+            } 
+            else 
+            {
                 error("bad http line: %.*s %.*s", (int) k.size(), k.data(), (int) ln.size(), ln.data());
                 return Error;
             }
         }
         scanned_ += 4;
         contentLen_ = atoi(getHeader("content-length").c_str());
-        if (buf.size() < contentLen_ + scanned_ && getHeader("Expect").size()) {
+        if (buf.size() < contentLen_ + scanned_ && getHeader("Expect").size())
+        {
             return Continue100;
         }
     }
-    if (!complete_ && buf.size() >= contentLen_ + scanned_) {
-        if (copyBody) {
+    if (!complete_ && buf.size() >= contentLen_ + scanned_) 
+    {
+        if (copyBody) 
+        {
             body.assign(buf.data() + scanned_, contentLen_);
-        } else {
+        } 
+        else 
+        {
             body2 = Slice(buf.data() + scanned_, contentLen_);
         }
         complete_ = true;
