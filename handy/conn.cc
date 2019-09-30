@@ -29,7 +29,7 @@ void TcpConn::attach(EventBase *base, int fd, Ip4Addr local, Ip4Addr peer) {
     con->channel_->onWrite([=] { con->handleWrite(con); });	//连接通道注册写事件，即TcpConn的handleWrite
 }
 
-void TcpConn::connect(EventBase *base, const string &host, short port, int timeout, const string &localip) {
+void TcpConn::connect(EventBase *base, const string &host, unsigned short port, int timeout, const string &localip) {
     fatalif(state_ != State::Invalid && state_ != State::Closed && state_ != State::Failed, "current state is bad state to connect. state: %d", state_);
     destHost_ = host;
     destPort_ = port;
@@ -276,7 +276,7 @@ listen_channel_(NULL),
 createcb_([]{ return TcpConnPtr(new TcpConn); }) {}	//创建tcp连接
 
 
-int TcpServer::bind(const std::string &host, short port, bool reusePort) {
+int TcpServer::bind(const std::string &host, unsigned short port, bool reusePort) {
     addr_ = Ip4Addr(host, port);
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     int r = net::setReuseAddr(fd);
@@ -300,7 +300,7 @@ int TcpServer::bind(const std::string &host, short port, bool reusePort) {
     return 0;
 }
 
-TcpServerPtr TcpServer::startServer(EventBases *bases, const std::string &host, short port, bool reusePort) {
+TcpServerPtr TcpServer::startServer(EventBases *bases, const std::string &host, unsigned short port, bool reusePort) {
     TcpServerPtr p(new TcpServer(bases));
     int r = p->bind(host, port, reusePort);
     if (r) {
@@ -359,7 +359,7 @@ void TcpServer::handleAccept() {
     }
 }
 
-HSHAPtr HSHA::startServer(EventBase *base, const std::string &host, short port, int threads) {
+HSHAPtr HSHA::startServer(EventBase *base, const std::string &host, unsigned short port, int threads) {
     HSHAPtr p = HSHAPtr(new HSHA(threads));
     p->server_ = TcpServer::startServer(base, host, port);
     return p->server_ ? p : NULL;
