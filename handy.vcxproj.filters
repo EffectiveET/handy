@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="10m\10m-cli.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="10m\10m-svr.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\chat.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\codec-cli.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\codec-svr.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\daemon.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\echo.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\hsha.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\http-hello.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\idle-close.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\reconnect.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\safe-close.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\stat.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\timer.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\udp-cli.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\udp-hsha.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\udp-svr.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\write-on-empty.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\codec.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\conf.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\conn.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\daemon.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\event_base.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\file.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\http.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\logging.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\net.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\poller.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\port_posix.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\stat-svr.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\threads.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\udp.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="handy\util.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\proto_msg.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\test.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="raw-examples\epoll-et.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="raw-examples\epoll.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="raw-examples\kqueue.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\conf.ut.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\handy.ut.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\tcpcli.ut.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_harness.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\threads.ut.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\ut.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\util.ut.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="handy\codec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\conf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\conn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\daemon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\event_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\handy-imp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\handy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\http.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\logging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\net.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\poller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\port_posix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\slice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\stat-svr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\threads.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\udp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="handy\util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\proto_msg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\test_harness.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

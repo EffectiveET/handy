@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{93EA8636-5E6C-46A5-A2D5-4BB37FA106F7}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\mount\project\handy;$(PUBLIC)\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\mount\project\handy;$(PUBLIC)\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\mount\project\handy;$(PUBLIC)\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\mount\project\handy;$(PUBLIC)\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_VS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_VS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_VS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_VS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="10m\10m-cli.cc" />
+    <ClCompile Include="10m\10m-svr.cc" />
+    <ClCompile Include="examples\chat.cc" />
+    <ClCompile Include="examples\codec-cli.cc" />
+    <ClCompile Include="examples\codec-svr.cc" />
+    <ClCompile Include="examples\daemon.cc" />
+    <ClCompile Include="examples\echo.cc" />
+    <ClCompile Include="examples\hsha.cc" />
+    <ClCompile Include="examples\http-hello.cc" />
+    <ClCompile Include="examples\idle-close.cc" />
+    <ClCompile Include="examples\reconnect.cc" />
+    <ClCompile Include="examples\safe-close.cc" />
+    <ClCompile Include="examples\stat.cc" />
+    <ClCompile Include="examples\timer.cc" />
+    <ClCompile Include="examples\udp-cli.cc" />
+    <ClCompile Include="examples\udp-hsha.cc" />
+    <ClCompile Include="examples\udp-svr.cc" />
+    <ClCompile Include="examples\write-on-empty.cc" />
+    <ClCompile Include="handy\codec.cc" />
+    <ClCompile Include="handy\conf.cc" />
+    <ClCompile Include="handy\conn.cc" />
+    <ClCompile Include="handy\daemon.cc" />
+    <ClCompile Include="handy\event_base.cc" />
+    <ClCompile Include="handy\file.cc" />
+    <ClCompile Include="handy\http.cc" />
+    <ClCompile Include="handy\logging.cc" />
+    <ClCompile Include="handy\net.cc" />
+    <ClCompile Include="handy\poller.cc" />
+    <ClCompile Include="handy\port_posix.cc" />
+    <ClCompile Include="handy\stat-svr.cc" />
+    <ClCompile Include="handy\threads.cc" />
+    <ClCompile Include="handy\udp.cc" />
+    <ClCompile Include="handy\util.cc" />
+    <ClCompile Include="protobuf\proto_msg.cc" />
+    <ClCompile Include="protobuf\test.cc" />
+    <ClCompile Include="raw-examples\epoll-et.cc" />
+    <ClCompile Include="raw-examples\epoll.cc" />
+    <ClCompile Include="raw-examples\kqueue.cc" />
+    <ClCompile Include="test\conf.ut.cc" />
+    <ClCompile Include="test\handy.ut.cc" />
+    <ClCompile Include="test\tcpcli.ut.cc" />
+    <ClCompile Include="test\test_harness.cc" />
+    <ClCompile Include="test\threads.ut.cc" />
+    <ClCompile Include="test\ut.cc" />
+    <ClCompile Include="test\util.ut.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="handy\codec.h" />
+    <ClInclude Include="handy\conf.h" />
+    <ClInclude Include="handy\conn.h" />
+    <ClInclude Include="handy\daemon.h" />
+    <ClInclude Include="handy\event_base.h" />
+    <ClInclude Include="handy\file.h" />
+    <ClInclude Include="handy\handy-imp.h" />
+    <ClInclude Include="handy\handy.h" />
+    <ClInclude Include="handy\http.h" />
+    <ClInclude Include="handy\logging.h" />
+    <ClInclude Include="handy\net.h" />
+    <ClInclude Include="handy\poller.h" />
+    <ClInclude Include="handy\port_posix.h" />
+    <ClInclude Include="handy\slice.h" />
+    <ClInclude Include="handy\stat-svr.h" />
+    <ClInclude Include="handy\status.h" />
+    <ClInclude Include="handy\threads.h" />
+    <ClInclude Include="handy\udp.h" />
+    <ClInclude Include="handy\util.h" />
+    <ClInclude Include="protobuf\proto_msg.h" />
+    <ClInclude Include="test\test_harness.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
